@@ -5,11 +5,19 @@ import os
 import plotly.express as px
 import openai
 
-# Load environment variables from .env file
+# Load environment variables from .env file (for local development)
 load_dotenv()
 
+# Get API key from environment or Streamlit secrets
+api_key = os.getenv("OPENAI_API_KEY")
+if not api_key and hasattr(st, 'secrets'):
+    try:
+        api_key = st.secrets["OPENAI_API_KEY"]
+    except:
+        pass
+
 # Initialize OpenAI client
-client = openai.OpenAI()
+client = openai.OpenAI(api_key=api_key)
 
 # Helper function to get dataset path
 def get_dataset_path():
